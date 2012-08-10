@@ -1,0 +1,5 @@
+#本地安装ikanalyzer
+mvn install:install-file -DgeneratePom=true -DgroupId=org.wltea.analyzer -DartifactId=ikanalyzer -Dversion=3.2.8 -Dpackaging=jar -Dfile=x:/ikanalyzer-3.2.8.jar -Dsources=x:/ikanalyzer-src-3.2.8.jar
+mvn install:install-file -DgeneratePom=true -DgroupId=lombok -DartifactId=lombok -Dversion=0.10.0 -Dpackaging=jar -Dsources=x:\lombok.jar
+mvn install:install-file -DgeneratePom=true -DgroupId=it.sauronsoftware.cron4j -DartifactId=cron4j -Dversion=2.2.5 -Dpackaging=jar -Dfile=X:/TEMP/cron4j-2.2.5/cron4j-2.2.5.jar -Dsources=X:/TEMP/cron4j-2.2.5/cron4j-src-2.2.5.jar
+mvn install:install-file -DgeneratePom=true -DgroupId=hirondelle.date4j -DartifactId=date4j -Dversion=1.0.0 -Dpackaging=jar -Dfile=X:/TEMP/date4j-1.0.0.jar -Dsources=X:/TEMP/date4j-1.0.0-sources.jar

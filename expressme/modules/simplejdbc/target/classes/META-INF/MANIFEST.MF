@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: mengfanjun
+Build-Jdk: 1.6.0_25
+Specification-Title: ExpressSimplejdbc
+Specification-Version: 1.0.0
+Implementation-Title: ExpressSimplejdbc
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: org.expressme
+Created-By: Maven Integration for Eclipse
+

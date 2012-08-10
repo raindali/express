@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.expressme</groupId>
+	<artifactId>expressme</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>expressme</name>
+
+	<profiles>
+		<profile>
+			<id>all</id>
+			<modules>
+				<module>modules/parent</module>
+				<module>modules/binding</module>
+				<module>modules/validator</module>
+				<module>modules/webwind</module>
+				<module>modules/simplejdbc</module>
+				<module>modules/search</module>
+				<module>modules/core</module>
+				<module>examples/showcase</module>
+				<module>tools/maven/archetype</module>				
+			</modules>
+		</profile>
+		<profile>
+			<id>modules</id>
+			<modules>
+				<module>modules/parent</module>
+				<module>modules/binding</module>
+				<module>modules/validator</module>
+				<module>modules/webwind</module>
+				<module>modules/simplejdbc</module>
+				<module>modules/search</module>
+				<module>modules/core</module>
+				<module>tools/maven/archetype</module>
+			</modules>
+		</profile>
+	</profiles>
+</project>

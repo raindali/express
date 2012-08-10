@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validators>
+	<validator name="required" class="com.dali.validator.validators.RequiredValidator" />
+	<validator name="length" class="com.dali.validator.validators.LengthValidator" />
+	<validator name="regex" class="com.dali.validator.validators.RegexValidator" />
+	<extendValidator name="mail" clazz="com.dali.validator.validators.RegexValidator" parmeter="\\w+@\\w+\\.\\w+" />
+</validators>

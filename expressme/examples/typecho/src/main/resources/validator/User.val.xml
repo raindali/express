@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command property="com.lib724.web.command.UserCommand">
+	<field property="user.logUsername">
+		<valid property="required" notice="用户名不能为空" />
+		<valid property="length" parmeter="4:16" notice="用户名长度为4-16个字符" />
+		<valid property="regex" parmeter="\w+" notice="用户名为字符a-z,1-9,_" />
+	</field>
+	<field property="user.logPassword">
+		<valid property="required" notice="密码不能为空" />
+		<valid property="length" parmeter="4:16" notice="密码长度为4-16个字符" />
+		<valid property="regex" parmeter="\w+" notice="密码为字符a-z,1-9" />
+	</field>
+	<field property="user.deptCode">
+		<valid property="required" notice="部门不能为空" />
+		<valid property="length" parmeter="8:8" notice="部门编号错误" />
+		<valid property="regex" parmeter="\d+" notice="部门编号错误" />
+	</field>
+	<method property="submit">
+		<field property="user.logUsername" />
+		<field property="user.logPassword" />
+		<field property="user.deptId" />
+	</method>
+	<method property="loginSubmit">
+		<field property="user.logUsername,user.logPassword" />
+	</method>
+</command>
