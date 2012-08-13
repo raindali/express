@@ -7,6 +7,11 @@
 	<packaging>pom</packaging>
 	<name>expressme</name>
 
+	<modules>
+		<module>modules</module>
+		<module>examples</module>
+	</modules>
+	<!-- 
 	<profiles>
 		<profile>
 			<id>all</id>
@@ -36,4 +41,5 @@
 			</modules>
 		</profile>
 	</profiles>
+	 -->
 </project>

@@ -26,12 +26,12 @@ import org.expressme.modules.web.security.CookieIdentityManager;
 import org.expressme.modules.web.security.FetchIdentity;
 import org.expressme.modules.web.security.IdentityManager;
 import org.expressme.persist.DaoFactory;
-import org.expressme.persist.DriverManagerDataSource;
-import org.expressme.persist.TransactionManager;
 import org.expressme.persist.dialect.MySQLDialect;
 import org.expressme.search.Searcher;
 import org.expressme.search.SearcherImpl;
 import org.expressme.search.mapper.DocumentMapper;
+import org.expressme.simplejdbc.datasource.DriverManagerDataSource;
+import org.expressme.simplejdbc.datasource.TransactionManager;
 import org.expressme.webwind.guice.ServletContextAware;
 
 import com.google.inject.Binder;
@@ -122,7 +122,7 @@ public class ShowcaseModule implements Module, ServletContextAware {
 		binder.bind(IdentityManager.class).to(CookieIdentityManager.class).asEagerSingleton();
 		binder.bind(IdentityInterceptor.class).asEagerSingleton();
 		binder.bind(BindAndValidatorInterceptor.class).asEagerSingleton();
-		WebScanner scanner = new WebScanner();
-		scanner.scanning(binder, "org.expressme.examples.showcase.web");
+//		WebScanner scanner = new WebScanner();
+		WebScanner.scanning(binder, "org.expressme.examples.showcase.web");
 	}
 }

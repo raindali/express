@@ -5,7 +5,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public @Getter @Setter class Department {
+@Getter
+@Setter
+public class Department {
 	private int did;
 	private String name;
 	private String code;

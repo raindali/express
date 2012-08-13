@@ -1,5 +1,6 @@
 package org.expressme.examples.showcase.web.service;
 
+import org.expressme.examples.showcase.entity.User;
 import org.expressme.modules.persist.DaoAccessor;
 import org.expressme.modules.persist.selectkey.MySQLSelectKeyDao;
 
@@ -12,5 +13,6 @@ public class IndexService {
 	public void index() {
 		MySQLSelectKeyDao mySQLSelectKeyDao =  daoAccessor.getDaoSupport(MySQLSelectKeyDao.class);
 		System.out.println("----" + mySQLSelectKeyDao.selectKey());
+		new User().create();
 	}
 }

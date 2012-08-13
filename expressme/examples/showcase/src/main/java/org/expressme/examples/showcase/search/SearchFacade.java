@@ -28,7 +28,8 @@ public class SearchFacade implements Destroyable {
     }
 
     public List<SearchableItem> search(String q, int first, int max) {
-        return searcher.search(q, first, max, true);
+//        return searcher.search(q, null, first, max, true);
+    	return null;
     }
 
     public void index(SearchableItem item) {
