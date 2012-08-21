@@ -24,8 +24,8 @@ public class IndexController extends AbstractWebSupport {
 	}
 
 	@Mapping(value = "/index/$1")
-	@Binding(IndexCommand.class)
-	public Renderer channel(String id) {
+//	@Binding(IndexCommand.class)
+	public Renderer channel(@Binding("index") IndexCommand index,  String id) {
 		logger.debug("--");
 		CityBusDict.dict();
 		return RendererFactory.renderer("channel");

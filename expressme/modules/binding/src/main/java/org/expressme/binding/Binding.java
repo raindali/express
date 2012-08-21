@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
  * 
  * @author Xiaoli (mengfan0871@gmail.com)
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Binding {
-
-    Class<?> value();
+	String value() default "";
+//    Class<?> value();
 }

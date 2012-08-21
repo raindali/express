@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class User extends AbstractAuditable {
-	private int uid;
+public class User extends AbstractAuditable<User, Integer> {
+	private Integer uid;
 	private String username;
 	private String password;
 	private String nick;
 	private String mail;
-	private int department;
+	private Integer department;
 }

@@ -2,18 +2,23 @@ package org.expressme.examples.showcase.entity;
 
 import java.util.List;
 
+import org.expressme.simplejdbc.annotations.Entity;
+import org.expressme.simplejdbc.annotations.Transient;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Department {
+@Entity
+public class Department extends AbstractAuditable {
 	private int did;
+	private int parentDid;
 	private String name;
-	private String code;
-	private String prefixCode;
 	private int sort;
 	private int state;
-	private Department prefix;
-	private List<Department> suffixList;
+	@Transient
+	private Department parent;
+	@Transient
+	private List<Department> leaves;
 }

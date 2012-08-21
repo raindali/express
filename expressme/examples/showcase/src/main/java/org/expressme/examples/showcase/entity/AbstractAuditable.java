@@ -1,21 +1,20 @@
 package org.expressme.examples.showcase.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import org.expressme.simplejdbc.core.ActiveRecord;
+import org.expressme.modules.ActiveRecordAndValid;
 
 /**
  * Abstract base class for auditable entities. Stores the audition values in
  * persistent fields.
  */
-@SuppressWarnings("rawtypes")
-public abstract class AbstractAuditable extends ActiveRecord {
-
+public abstract class AbstractAuditable<T, ID extends Serializable> extends ActiveRecordAndValid<T, ID> {
 	private int createdBy;
 	private Date createdDate;
 	private int lastModifiedBy;
 	private Date lastModifiedDate;
-
+	
 	public int getCreatedBy() {
 		return createdBy;
 	}
@@ -47,4 +46,5 @@ public abstract class AbstractAuditable extends ActiveRecord {
 	public void setLastModifiedDate(final Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
+	
 }

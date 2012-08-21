@@ -28,17 +28,19 @@ class EntityOperation<T> {
 
 	final String tableName;
 	final Class<T> entityClass;
+	final Class<?> actualEntityClass;
 	final String idProperty;
 	final Map<String, PropertyMapping> mappings;
 	final RowMapper<T> rowMapper;
 
 	public EntityOperation(Class<T> entityClass) {
 		this.entityClass = entityClass;
-		Table table = entityClass.getAnnotation(Table.class);
-		this.tableName = table == null ? Utils.addUnderscores(entityClass.getSimpleName())
-				: ("".equals(table.name()) ? Utils.addUnderscores(entityClass.getSimpleName()) : table.name());
-		Map<String, Method> getters = Utils.findPublicGetters(entityClass);
-		Map<String, Method> setters = Utils.findPublicSetters(entityClass);
+		this.actualEntityClass = Utils.getEntityClass(entityClass);
+		Table table = actualEntityClass.getAnnotation(Table.class);
+		this.tableName = table == null ? Utils.addUnderscores(actualEntityClass.getSimpleName())
+				: ("".equals(table.name()) ? Utils.addUnderscores(actualEntityClass.getSimpleName()) : table.name());
+		Map<String, Method> getters = Utils.findPublicGetters(actualEntityClass);
+		Map<String, Method> setters = Utils.findPublicSetters(actualEntityClass);
 		this.idProperty = findIdProperty(getters);
 		this.mappings = getPropertyMappings(getters, setters);
 		this.rowMapper = createRowMapper();

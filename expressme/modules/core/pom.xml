@@ -29,6 +29,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.expressme</groupId>
+			<artifactId>expressme-simplejdbc</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>org.expressme</groupId>
 			<artifactId>expressme-search</artifactId>
 		</dependency>
 		<dependency>

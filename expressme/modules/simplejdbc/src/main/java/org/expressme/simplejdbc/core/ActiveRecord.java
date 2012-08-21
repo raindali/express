@@ -94,7 +94,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	}
 
 	public T selectById(ID idValue) {
-		Object entity = getDb().selectById(Utils.getEntityClass(this.getClass()), idValue);
+		Object entity = getDb().selectById(getActurlClass(), idValue);
 		return convert(entity);
 	}
 	/**
@@ -108,7 +108,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	 * @return The only one single result, or null if no result.
 	 */
 	public T selectForObject(String sql, Object... args) {
-		Object entity = getDb().selectForObject(Utils.getEntityClass(this.getClass()), sql, args);
+		Object entity = getDb().selectForObject(getActurlClass(), sql, args);
 		return convert(entity);
 	}
 
@@ -124,7 +124,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	 * @return List of query result.
 	 */
 	public List<T> selectForList(String sql, Object... params) {
-		List<?> list = getDb().selectForList(Utils.getEntityClass(getClass()), sql, params);
+		List<?> list = getDb().selectForList(getActurlClass(), sql, params);
 		List<T> rest = new ArrayList<T>(list.size());
 		for (Object entity : list) {
 			rest.add(convert(entity));
@@ -151,7 +151,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	 * @return List of query result.
 	 */
 	public List<T> selectForLimitedList(String sql, int first, int max, Object... args) {
-		List<?> list = getDb().selectForLimitedList(Utils.getEntityClass(getClass()), sql, first, max, args);
+		List<?> list = getDb().selectForLimitedList(getActurlClass(), sql, first, max, args);
 		List<T> rest = new ArrayList<T>(list.size());
 		for (Object entity : list) {
 			rest.add(convert(entity));
@@ -174,7 +174,11 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 		return null;
 	}
 
-	private T convert(Object entity) {
+	private Class<?> getActurlClass() {
+		return Utils.getEntityClass(getClass());
+	}
+
+	private <E> T convert(E entity) {
 		if (entity == null) {
 			return null;
 		} else if (entity.getClass() == this.getClass()) {

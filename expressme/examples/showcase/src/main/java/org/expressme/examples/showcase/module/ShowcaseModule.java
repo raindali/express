@@ -18,18 +18,16 @@ import org.expressme.examples.showcase.search.SearchableItem;
 import org.expressme.examples.showcase.web.interceptor.BindAndValidatorInterceptor;
 import org.expressme.examples.showcase.web.interceptor.IdentityInterceptor;
 import org.expressme.examples.showcase.web.manager.FetchIdentityImpl;
-import org.expressme.modules.persist.DaoAccessor;
-import org.expressme.modules.persist.DaoProxyFactory;
 import org.expressme.modules.utils.ContextUtils;
 import org.expressme.modules.web.WebScanner;
 import org.expressme.modules.web.security.CookieIdentityManager;
 import org.expressme.modules.web.security.FetchIdentity;
 import org.expressme.modules.web.security.IdentityManager;
-import org.expressme.persist.DaoFactory;
-import org.expressme.persist.dialect.MySQLDialect;
 import org.expressme.search.Searcher;
 import org.expressme.search.SearcherImpl;
 import org.expressme.search.mapper.DocumentMapper;
+import org.expressme.simplejdbc.core.Db;
+import org.expressme.simplejdbc.core.JdbcTemplate;
 import org.expressme.simplejdbc.datasource.DriverManagerDataSource;
 import org.expressme.simplejdbc.datasource.TransactionManager;
 import org.expressme.webwind.guice.ServletContextAware;
@@ -109,11 +107,9 @@ public class ShowcaseModule implements Module, ServletContextAware {
 		String password = ContextUtils.getProperty("jdbc.password");
 		DataSource dataSource = new DriverManagerDataSource(driverClass, url, username, password);
 		TransactionManager txManager = new TransactionManager(dataSource);
-		DaoFactory daoFactory = new DaoFactory(new MySQLDialect());
-		binder.bind(TransactionManager.class).toInstance(txManager);
-		binder.bind(DaoFactory.class).toInstance(daoFactory);
-		binder.bind(DaoProxyFactory.class).asEagerSingleton();
-		binder.bind(DaoAccessor.class).asEagerSingleton();
+		Db db = new Db();
+		db.setJdbcTemplate(new JdbcTemplate(txManager, 20));
+		binder.bind(Db.class).toInstance(db);
 	}
 
 	void configureWeb(Binder binder) {
@@ -122,7 +118,6 @@ public class ShowcaseModule implements Module, ServletContextAware {
 		binder.bind(IdentityManager.class).to(CookieIdentityManager.class).asEagerSingleton();
 		binder.bind(IdentityInterceptor.class).asEagerSingleton();
 		binder.bind(BindAndValidatorInterceptor.class).asEagerSingleton();
-//		WebScanner scanner = new WebScanner();
 		WebScanner.scanning(binder, "org.expressme.examples.showcase.web");
 	}
 }

@@ -33,10 +33,10 @@
 			<groupId>org.expressme</groupId>
 			<artifactId>expressme-validator</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.expressme</groupId>
 			<artifactId>expressme-persist</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.expressme</groupId>
 			<artifactId>expressme-simplejdbc</artifactId>

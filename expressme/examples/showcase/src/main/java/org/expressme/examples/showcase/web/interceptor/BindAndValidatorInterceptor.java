@@ -19,17 +19,17 @@ public class BindAndValidatorInterceptor implements Interceptor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void intercept(Execution execution, InterceptorChain chain) throws Exception {
-		Method method = execution.getAction().method;
-		Binding binding = method.getAnnotation(Binding.class);
-		if (binding == null) {
-			binding = method.getDeclaringClass().getAnnotation(Binding.class);
-		}
-		if (binding != null) {
-			// 将request参数绑定到bean上
-			Container container = (Container) BindingExecutor.bindParameters(binding.value(), execution.request.getParameterMap());
-			ContainerContext.setContainerContext(container);
-			ValidatorUtils.validator(container, method.getName());
-		}
+//		Method method = execution.getAction().arguments;
+//		Binding binding = method.getAnnotation(Binding.class);
+//		if (binding == null) {
+//			binding = method.getDeclaringClass().getAnnotation(Binding.class);
+//		}
+//		if (binding != null) {
+//			// 将request参数绑定到bean上
+//			Container container = (Container) BindingExecutor.bindParameters(binding.value(), execution.request.getParameterMap());
+//			ContainerContext.setContainerContext(container);
+//			ValidatorUtils.validator(container, method.getName());
+//		}
 		chain.doInterceptor(execution);
 	}
 

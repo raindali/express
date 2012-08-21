@@ -20,6 +20,13 @@ public class JdbcTemplate {
 	TransactionManager txManager;
 	int fetchSize = 20;
 
+	public JdbcTemplate() {
+	}
+	public JdbcTemplate(TransactionManager txManager, int fetchSize) {
+		this.txManager = txManager;
+		this.fetchSize = fetchSize;
+	}
+
 	public void setTxManager(TransactionManager txManager) {
 		this.txManager = txManager;
 	}
@@ -29,7 +36,7 @@ public class JdbcTemplate {
 	}
 
 	public <T> List<T> query(String sql, Object[] args, final RowMapper<T> rowMapper) throws DbException {
-//		log.debug(sql + " - " + Arrays.toString(args));
+		//		log.debug(sql + " - " + Arrays.toString(args));
 		System.out.println(sql + " - " + Arrays.toString(args));
 		return new ResultSetCallback<List<T>>() {
 			@Override
@@ -57,7 +64,7 @@ public class JdbcTemplate {
 	}
 
 	public int update(String sql, Object... args) throws DbException {
-//		log.debug(sql + " - " + Arrays.toString(args));
+		//		log.debug(sql + " - " + Arrays.toString(args));
 		System.out.println(sql + " - " + Arrays.toString(args));
 		return new PreparedStatementCallback<Integer>() {
 			@Override
