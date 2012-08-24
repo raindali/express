@@ -27,6 +27,17 @@ public class Db {
     }
 
     final Map<String, EntityOperation<?>> entityMap = new ConcurrentHashMap<String, EntityOperation<?>>();
+    final static RowMapper<Long> longRowMapper = new RowMapper<Long>() {
+        public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.getLong(1);
+        }
+    };
+
+    final static RowMapper<Integer> intRowMapper = new RowMapper<Integer>() {
+        public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.getInt(1);
+        }
+    };
 
     @SuppressWarnings("rawtypes")
     EntityOperation<?> getEntityOperation(Class<?> entityClass) {
@@ -109,16 +120,47 @@ public class Db {
         return jdbcTemplate.update(sqlo.sql, sqlo.params);
     }
 
-	public <T> T selectForObject(String sql, Object... args) {
-        return (T) selectForRowMapper(new RowMapper<Object>(){
-			@Override
-			public Object mapRow(ResultSet rs, String[] names, int[] types) throws SQLException {
-				return rs.getObject(1);
-			}
-        }, sql, args);
+    /**
+     * Query for long result. For example:
+     * <code>
+     * long count = db.queryForLong("select count(*) from User where age>?", 20);
+     * </code>
+     * 
+     * @param sql SQL query statement.
+     * @param args SQL query parameters.
+     * @return Long result.
+     */
+    public long selectForLong(String sql, Object... args) {
+        log.info("Query for long: " + sql);
+        List<Long> list = jdbcTemplate.query(sql, args, longRowMapper);
+        if (list.isEmpty())
+            throw new DbException("empty results.");
+        if (list.size() > 1)
+            throw new DbException("non-unique results.");
+        return list.get(0);
     }
-	
-	public <T> T selectForRowMapper(RowMapper<T> rowMapper, String sql, Object... args) {
+
+    /**
+     * Query for int result. For example:
+     * <code>
+     * int count = db.queryForLong("select count(*) from User where age>?", 20);
+     * </code>
+     * 
+     * @param sql SQL query statement.
+     * @param args SQL query parameters.
+     * @return Int result.
+     */
+    public int selectForInt(String sql, Object... args) {
+        log.info("Query for int: " + sql);
+        List<Integer> list = jdbcTemplate.query(sql, args, intRowMapper);
+        if (list.isEmpty())
+            throw new DbException("empty results.");
+        if (list.size() > 1)
+            throw new DbException("non-unique results.");
+        return list.get(0);
+    }
+
+	public <T> T selectForObject(String sql, Object[] args, RowMapper<T> rowMapper) {
         log.info("Query for Primitive: " + sql);
         List<T> list = (List<T>) jdbcTemplate.query(sql, args, rowMapper);
         if (list.isEmpty())

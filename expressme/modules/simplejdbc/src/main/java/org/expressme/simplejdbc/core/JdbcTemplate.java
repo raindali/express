@@ -2,7 +2,6 @@ package org.expressme.simplejdbc.core;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,17 +40,9 @@ public class JdbcTemplate {
 		return new ResultSetCallback<List<T>>() {
 			@Override
 			protected List<T> doInResultSet(ResultSet rs) throws SQLException {
-				ResultSetMetaData meta = rs.getMetaData();
-				int colCount = meta.getColumnCount();
-				String[] colNames = new String[colCount];
-				int[] colTypes = new int[colCount];
-				for (int i = 0; i < colCount; i++) {
-					colNames[i] = meta.getColumnName(i + 1);
-					colTypes[i] = meta.getColumnType(i + 1);
-				}
 				List<T> list = new ArrayList<T>(getFetchSize());
 				while (rs.next()) {
-					list.add(rowMapper.mapRow(rs, colNames, colTypes));
+					list.add(rowMapper.mapRow(rs, rs.getRow()));
 				}
 				return list;
 			}

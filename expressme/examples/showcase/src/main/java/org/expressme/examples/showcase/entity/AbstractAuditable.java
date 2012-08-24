@@ -9,7 +9,7 @@ import org.expressme.modules.ActiveRecordAndValid;
  * Abstract base class for auditable entities. Stores the audition values in
  * persistent fields.
  */
-public abstract class AbstractAuditable<T, ID extends Serializable> extends ActiveRecordAndValid<T, ID> {
+public abstract class AbstractAuditable<T, ID> extends ActiveRecordAndValid<T, ID> {
 	private int createdBy;
 	private Date createdDate;
 	private int lastModifiedBy;

@@ -23,6 +23,6 @@ public abstract class RowMapper<T> {
      * @return Java object.
      * @throws SQLException If any SQLException occurs.
      */
-    public abstract T mapRow(ResultSet rs, String[] names, int[] types) throws SQLException;
+	public abstract T mapRow(ResultSet rs, int rowNum) throws SQLException;
 
 }

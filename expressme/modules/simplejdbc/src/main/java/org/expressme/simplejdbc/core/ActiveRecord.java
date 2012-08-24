@@ -1,6 +1,5 @@
 package org.expressme.simplejdbc.core;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 @SuppressWarnings("unchecked")
-public abstract class ActiveRecord<T, ID extends Serializable> {
+public abstract class ActiveRecord<T, ID> {
 	final Log log = LogFactory.getLog(getClass());
 	private Db getDb() {
 		return DbHolder.getDb();
@@ -57,6 +56,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	public void deleteById(ID idValue) {
 		getDb().deleteById(this.getClass(), idValue);
 	}
+
 	/**
 	 * Delete an entity by its id property. For example:
 	 * 
@@ -94,9 +94,11 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	}
 
 	public T selectById(ID idValue) {
-		Object entity = getDb().selectById(getActurlClass(), idValue);
-		return convert(entity);
+		Object entity = getDb().selectById(this.getClass(), idValue);
+		Utils.copy(this, entity);
+		return (T) this;
 	}
+	
 	/**
 	 * Query for one single object. For example:
 	 * <code>
@@ -107,7 +109,7 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 	 * @param args SQL query parameters.
 	 * @return The only one single result, or null if no result.
 	 */
-	public T selectForObject(String sql, Object... args) {
+	public T selectEntity(String sql, Object... args) {
 		Object entity = getDb().selectForObject(getActurlClass(), sql, args);
 		return convert(entity);
 	}
@@ -158,6 +160,9 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 		}
 		return rest;
 	}
+	private Class<?> getActurlClass() {
+		return Utils.getEntityClass(getClass());
+	}
 
 	private ID getIdValue() {
 		Map<String, Method> getter = Utils.findPublicGetters(this.getClass());
@@ -174,9 +179,6 @@ public abstract class ActiveRecord<T, ID extends Serializable> {
 		return null;
 	}
 
-	private Class<?> getActurlClass() {
-		return Utils.getEntityClass(getClass());
-	}
 
 	private <E> T convert(E entity) {
 		if (entity == null) {

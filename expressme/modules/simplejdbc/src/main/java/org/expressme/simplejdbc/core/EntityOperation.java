@@ -50,7 +50,7 @@ class EntityOperation<T> {
 	RowMapper<T> createRowMapper() {
 		return new RowMapper<T>() {
 			@Override
-			public T mapRow(ResultSet rs, String[] names, int[] types) throws SQLException {
+			public T mapRow(ResultSet rs,  int rowNum) throws SQLException {
 				try {
 					T t = entityClass.newInstance();
 					ResultSetMetaData meta = rs.getMetaData();

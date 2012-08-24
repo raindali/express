@@ -1,4 +1,4 @@
-package org.expressme.simplejdbc.core;
+﻿package org.expressme.simplejdbc.core;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -9,20 +9,12 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.expressme.simplejdbc.annotations.Transient;
 
 @SuppressWarnings("unchecked")
-public abstract class ActiveRecord2<T, ID extends Serializable> {
+public abstract class ActiveRecord2<T, ID> {
 	final Log log = LogFactory.getLog(getClass());
-	@Transient
-	private Db db;
-	
-	public void setDb(Db db) {
-		this.db = db;
-	}
-	
 	private Db getDb() {
-		return db;
+		return DbHolder.getDb();
 	}
 	/**
 	 * Create an entity in database, writing all insertable properties.
@@ -77,6 +69,18 @@ public abstract class ActiveRecord2<T, ID extends Serializable> {
 		getDb().deleteEntity(this);
 	}
 
+
+	/**
+	 * Execute any update SQL statement.
+	 * 
+	 * @param sql SQL query.
+	 * @param params SQL parameters.
+	 * @return Number of affected rows.
+	 */
+	public int executeUpdate(String sql, Object... params) {
+		return getDb().executeUpdate(sql, params);
+	}
+
 	/**
 	 * Get entity by its id.
 	 * 
@@ -90,8 +94,7 @@ public abstract class ActiveRecord2<T, ID extends Serializable> {
 	}
 
 	public T selectById(ID idValue) {
-		Class<?> acturlClass = Utils.getEntityClass(this.getClass());
-		Object entity = getDb().selectById(acturlClass, idValue);
+		Object entity = getDb().selectById(Utils.getEntityClass(this.getClass()), idValue);
 		return convert(entity);
 	}
 	/**
@@ -105,8 +108,7 @@ public abstract class ActiveRecord2<T, ID extends Serializable> {
 	 * @return The only one single result, or null if no result.
 	 */
 	public T selectForObject(String sql, Object... args) {
-		Class<?> acturlClass = Utils.getEntityClass(this.getClass());
-		Object entity = getDb().selectForObject(acturlClass, sql, args);
+		Object entity = getDb().selectForObject(Utils.getEntityClass(this.getClass()), sql, args);
 		return convert(entity);
 	}
 
