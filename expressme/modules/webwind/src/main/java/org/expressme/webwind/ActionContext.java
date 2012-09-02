@@ -1,5 +1,8 @@
 package org.expressme.webwind;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +20,7 @@ public final class ActionContext {
     private ServletContext context;
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private Map<String, String> errors;
 
     /**
      * Return the ServletContext of current web application.
@@ -46,6 +50,14 @@ public final class ActionContext {
         return request.getSession();
     }
 
+    public Map<String, String> getErrors() {
+    	return errors;
+    }
+    
+    public void setErrors(Map<String, String> errors) {
+    	this.errors = errors;
+    }
+
     /**
      * Get current ActionContext object.
      */
@@ -58,10 +70,13 @@ public final class ActionContext {
         ctx.context = context;
         ctx.request = request;
         ctx.response = response;
+        ctx.errors = new LinkedHashMap<String, String>();
         actionContextThreadLocal.set(ctx);
+        
     }
 
     static void removeActionContext() {
         actionContextThreadLocal.remove();
     }
+
 }

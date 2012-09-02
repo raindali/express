@@ -12,6 +12,10 @@
 	<name>ExpressWebwind</name>
 	<dependencies>
 		<dependency>
+			<groupId>org.expressme</groupId>
+			<artifactId>expressme-validator</artifactId>
+		</dependency>		
+		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>

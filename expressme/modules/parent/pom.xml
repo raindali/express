@@ -98,22 +98,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.expressme</groupId>
-				<artifactId>expressme-binding</artifactId>
-				<version>${expressme.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.expressme</groupId>
 				<artifactId>expressme-validator</artifactId>
 				<version>${expressme.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.expressme</groupId>
 				<artifactId>expressme-persist</artifactId>
-				<version>${expressme.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.expressme</groupId>
-				<artifactId>expressme-simplejdbc</artifactId>
 				<version>${expressme.version}</version>
 			</dependency>
 			<dependency>

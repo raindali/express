@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.expressme.webwind.annotations.ModelAttribute;
+import org.expressme.webwind.annotations.PathVariable;
+import org.expressme.webwind.annotations.RequestParameter;
+import org.expressme.webwind.bind.BindFactory;
 import org.expressme.webwind.container.ContainerFactory;
 import org.expressme.webwind.converter.ConverterFactory;
 import org.expressme.webwind.renderer.JavaScriptRenderer;
@@ -24,6 +28,9 @@ import org.expressme.webwind.renderer.Renderer;
 import org.expressme.webwind.renderer.TextRenderer;
 import org.expressme.webwind.template.JspTemplateFactory;
 import org.expressme.webwind.template.TemplateFactory;
+
+import com.dali.validator.ValidatorUtils;
+import com.dali.validator.annotation.Valid;
 
 /**
  * Dispatcher handles ALL requests from clients, and dispatches to appropriate 
@@ -222,14 +229,7 @@ class Dispatcher {
             String[] args = matcher.getMatchedParameters(url);
             if (args!=null) {
                 Action action = urlMap.get(matcher);
-                Object[] arguments = new Object[args.length];
-                for (int i=0; i<args.length; i++) {
-                    Class<?> type = action.arguments[i];
-                    if (type.equals(String.class))
-                        arguments[i] = args[i];
-                    else
-                        arguments[i] = converterFactory.convert(type, args[i]);
-                }
+				Object[] arguments = generalArguments(req, args, action);
                 execution = new Execution(req, resp, action, arguments);
                 break;
             }
@@ -239,6 +239,41 @@ class Dispatcher {
         }
         return execution!=null;
     }
+
+	private Object[] generalArguments(HttpServletRequest req, String[] args, Action action) {
+		Object[] arguments = new Object[action.arguments.length];
+		for (int i=0; i<arguments.length; i++) {
+			Class<?> type = action.arguments[i];
+			ModelAttribute modelAttribute = type.getAnnotation(ModelAttribute.class);
+			if (modelAttribute != null) {
+				arguments[i] = BindFactory.bind(req, modelAttribute.value(), type);
+				Valid valid = type.getAnnotation(Valid.class);
+				if (valid != null) {
+					ValidatorUtils.validator(arguments[i], valid.value());
+				}
+				continue;
+			}
+			PathVariable pathVariable = type.getAnnotation(PathVariable.class);
+			if (pathVariable != null) {
+		      if (type.equals(String.class))
+		          arguments[i] = args[pathVariable.value()];
+		      else
+		          arguments[i] = converterFactory.convert(type, args[pathVariable.value()]);
+		      continue;
+			}
+			RequestParameter requestParameter = type.getAnnotation(RequestParameter.class);
+			if (requestParameter != null) {
+				if (type.equals(String.class))
+		            arguments[i] = req.getParameter(requestParameter.value());
+		        else{
+		    		arguments[i] = converterFactory.convert(type, req.getParameter(requestParameter.value()));
+		        }
+		        continue;
+			}
+			arguments[i] = null;
+		}
+		return arguments;
+	}
 
     void handleExecution(Execution execution, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (this.multipartSupport) {

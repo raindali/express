@@ -20,7 +20,7 @@ public class BindUtils {
     static final Lock rLock = rwLock.readLock();
     static final Lock wLock = rwLock.writeLock();
 
-    public static <T> T bind(ServletRequest request, Class<T> clazz) {
+    public static <T> T bind(ServletRequest request, String prefix, Class<T> clazz) {
     	ModelAndMethod<T> mam = getModelAndMethod(clazz);
         try {
             // try instance action:
@@ -31,7 +31,7 @@ public class BindUtils {
             // try to invoke all setters:
             List<String> props = mam.getProperties();
             for (String prop : props) {
-                String value = request.getParameter(prop);
+                String value = request.getParameter(startingWith(prefix, prop));
                 if(value!=null) {
                     // only invoke with non-null value:
                     mam.invokeSetter(model, prop, value);
@@ -39,7 +39,7 @@ public class BindUtils {
             }
             props = mam.getArrayProperties();
             for (String prop : props) {
-                String[] values = request.getParameterValues(prop);
+                String[] values = request.getParameterValues(startingWith(prefix, prop));
                 if(values!=null) {
                     mam.invokeSetter(model, prop, values);
                 }
@@ -51,6 +51,11 @@ public class BindUtils {
         return null;
     }
     
+    static String startingWith(String prefix, String prop) {
+    	return (prefix==null?"":prefix.concat(".")).concat(prop);
+    }
+
+	@SuppressWarnings("unchecked")
 	static <T> ModelAndMethod<T> getModelAndMethod(Class<T> clazz) {
 		rLock.lock();
 		try {

@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.expressme.bind2.BindUtils;
 import org.expressme.modules.persist.DaoAccessor;
 import org.expressme.modules.web.security.IdentityManager;
 import org.expressme.modules.web.security.SecurityChecker;
 import org.expressme.webwind.ActionContext;
+import org.expressme.webwind.bind.BindFactory;
 import org.expressme.webwind.renderer.TemplateRenderer;
 
 import com.google.inject.Inject;
@@ -43,7 +43,7 @@ public abstract class AbstractWebSupport implements Settings {
 	}
 
 	protected <T> T bind(Class<T> clazz) {
-		return BindUtils.bind(getHttpServletRequest(), clazz);
+		return BindFactory.bind(getHttpServletRequest(), clazz);
 	}
 	
 
