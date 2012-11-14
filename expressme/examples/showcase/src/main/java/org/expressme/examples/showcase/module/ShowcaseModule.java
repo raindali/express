@@ -18,18 +18,19 @@ import org.expressme.examples.showcase.search.SearchableItem;
 import org.expressme.examples.showcase.web.interceptor.BindAndValidatorInterceptor;
 import org.expressme.examples.showcase.web.interceptor.IdentityInterceptor;
 import org.expressme.examples.showcase.web.manager.FetchIdentityImpl;
+import org.expressme.modules.persist.DbContext;
 import org.expressme.modules.utils.ContextUtils;
 import org.expressme.modules.web.WebScanner;
 import org.expressme.modules.web.security.CookieIdentityManager;
 import org.expressme.modules.web.security.FetchIdentity;
 import org.expressme.modules.web.security.IdentityManager;
+import org.expressme.persist.Db;
+import org.expressme.persist.DriverManagerDataSource;
+import org.expressme.persist.JdbcTemplate;
+import org.expressme.persist.TransactionManager;
 import org.expressme.search.Searcher;
 import org.expressme.search.SearcherImpl;
 import org.expressme.search.mapper.DocumentMapper;
-import org.expressme.simplejdbc.core.Db;
-import org.expressme.simplejdbc.core.JdbcTemplate;
-import org.expressme.simplejdbc.datasource.DriverManagerDataSource;
-import org.expressme.simplejdbc.datasource.TransactionManager;
 import org.expressme.webwind.guice.ServletContextAware;
 
 import com.google.inject.Binder;
@@ -110,14 +111,15 @@ public class ShowcaseModule implements Module, ServletContextAware {
 		Db db = new Db();
 		db.setJdbcTemplate(new JdbcTemplate(txManager, 20));
 		binder.bind(Db.class).toInstance(db);
+		DbContext.setDb(db);
 	}
 
 	void configureWeb(Binder binder) {
 		// bind web:
 		binder.bind(FetchIdentity.class).to(FetchIdentityImpl.class).asEagerSingleton();
 		binder.bind(IdentityManager.class).to(CookieIdentityManager.class).asEagerSingleton();
-		binder.bind(IdentityInterceptor.class).asEagerSingleton();
-		binder.bind(BindAndValidatorInterceptor.class).asEagerSingleton();
+//		binder.bind(IdentityInterceptor.class).asEagerSingleton();
+//		binder.bind(BindAndValidatorInterceptor.class).asEagerSingleton();
 		WebScanner.scanning(binder, "org.expressme.examples.showcase.web");
 	}
 }

@@ -8,21 +8,28 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<expressme.version>1.0.0</expressme.version>
-		<jetty.version>7.5.4.v20111024</jetty.version>
+		<jetty.version>7.6.5.v20120716</jetty.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
+		<commons-io.version>2.4</commons-io.version>
+		<guava.version>13.0.1</guava.version>		
 		<h2.version>1.3.168</h2.version>
-		<mysql.version>5.1.17</mysql.version>
+		<mysql.version>5.1.21</mysql.version>
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
+		
+		<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
+		<jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
+		<jdbc.driver.version>{mysql.version}</jdbc.driver.version>
 	</properties>
 	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
 	<repositories>
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. -->
-		<repository>
+<!-- 		<repository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
 			<url>http://localhost:8081/nexus/content/groups/public</url>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>offical</id>
 			<name>Maven Official Repository</name>
@@ -239,14 +246,14 @@
 			<!-- excel end -->
 			<!-- utils begin -->
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>2.6</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.1</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
@@ -277,8 +284,9 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>11.0</version>
+				<version>${guava.version}</version>
 			</dependency>
+			
 			<!-- joda -->
 			<dependency>
 				<groupId>joda-time</groupId>
@@ -335,29 +343,18 @@
 				<scope>test</scope>
 			</dependency>
 			<!-- jetty -->
+			<!-- jetty -->
 			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
+				<groupId>org.eclipse.jetty.aggregate</groupId>
 				<artifactId>jetty-webapp</artifactId>
 				<version>${jetty.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-jsp-2.1</artifactId>
+				<artifactId>jetty-jsp</artifactId>
 				<version>${jetty.version}</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jsp-2.1-glassfish</artifactId>
-				<version>2.1.v20100127</version>
-				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.mortbay.jetty</groupId>
-						<artifactId>servlet-api</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.dbunit</groupId>
@@ -413,59 +410,73 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>2.5.1</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
 						<showWarnings>true</showWarnings>
 					</configuration>
 				</plugin>
-				<!-- test插件, 增大内存且仅测试名称为*Test的类 -->
+
+				<!-- resource插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+
+				<!-- test插件, 仅测试名称为*Test的类, 使用支持分组测试的surefire-junit47 driver -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.10</version>
+					<version>2.12</version>
 					<configuration>
-						<argLine>-Xmx256M</argLine>
 						<includes>
 							<include>**/*Test.java</include>
 						</includes>
 					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.surefire</groupId>
+							<artifactId>surefire-junit47</artifactId>
+							<version>2.12</version>
+						</dependency>
+					</dependencies>
 				</plugin>
-				<!-- cobertura插件 -->
+				
+				<!-- 增加更多的Source和Test Source目录插件 -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+					
+        		<!-- cobertura 测试覆盖率统计插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
 					<version>2.5.1</version>
 				</plugin>
-				<!-- war插件, 设定war名称不带版本号 -->
+
+				<!-- war打包插件, 设定war包名称不带版本号 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>2.1.1</version>
+					<version>2.2</version>
 					<configuration>
 						<warName>${project.artifactId}</warName>
 					</configuration>
 				</plugin>
-				<!-- resource插件, 设定编码 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
-				<!-- jar相关插件 -->
+
+				<!-- jar打包相关插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>2.4</version>
 					<configuration>
 						<archive>
 							<manifest>
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							</manifest>
 						</archive>
 					</configuration>
@@ -475,85 +486,99 @@
 					<artifactId>maven-source-plugin</artifactId>
 					<version>2.1.2</version>
 				</plugin>
+
 				<!-- clean插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.4.1</version>
+					<version>2.5</version>
 				</plugin>
+
 				<!-- install插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>2.3.1</version>
 				</plugin>
-				<!-- deploy插件 -->
+				
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.7</version>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>1.1.1</version>
+					<executions>
+						<execution>
+							<id>enforce-banned-dependencies</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<bannedDependencies>
+										<searchTransitive>true</searchTransitive>
+										<excludes>
+											<exclude>commons-logging</exclude>
+											<exclude>aspectj:aspectj*</exclude>
+											<exclude>org.springframework:2.*</exclude>
+											<exclude>org.springframework:3.0.*</exclude>
+										</excludes>
+									</bannedDependencies>
+								</rules>
+								<fail>true</fail>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
-				<!-- eclipse插件,设定下载Source并屏蔽.svn文件 -->
+
+				<!-- eclipse插件, 设定下载依赖包的source code -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>2.8</version>
+					<version>2.9</version>
 					<configuration>
-						<sourceExcludes>
-							<sourceExclude>**/.svn/</sourceExclude>
-						</sourceExcludes>
 						<downloadSources>true</downloadSources>
 						<downloadJavadocs>false</downloadJavadocs>
 					</configuration>
 				</plugin>
-				<!-- jetty插件,设定重载模式 -->
+
+				<!-- jetty插件 -->
 				<plugin>
 					<groupId>org.mortbay.jetty</groupId>
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>${jetty.version}</version>
-					<configuration>
-						<reload>manual</reload>
-					</configuration>
 				</plugin>
-				<!-- dependency插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.3</version>
-				</plugin>
-				<!-- ant插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.6</version>
-				</plugin>
+				
 				<!-- assembly插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.2.1</version>
+					<version>2.3</version>
 				</plugin>
-				<!-- sonar插件 -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>2.0-beta-2</version>
-				</plugin>
-				<!-- release相关插件 -->
+
+				<!-- dependency相关插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.2.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-scm-plugin</artifactId>
-					<version>1.5</version>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-					<version>1.2</version>
+					<version>1.3.1</version>
+				</plugin>
+
+				<!-- ant插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+				
+				<!-- exec java 插件 -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.2.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

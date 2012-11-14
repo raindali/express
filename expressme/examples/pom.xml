@@ -15,6 +15,5 @@
 
 	<modules>
 		<module>showcase</module>
-		<module>typecho</module>
 	</modules>
 </project>

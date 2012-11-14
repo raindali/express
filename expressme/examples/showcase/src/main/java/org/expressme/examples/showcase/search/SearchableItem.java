@@ -1,6 +1,6 @@
 package org.expressme.examples.showcase.search;
 
-import org.expressme.examples.showcase.entity.CityBus;
+import org.expressme.examples.showcase.domains.entity.CityBus;
 import org.expressme.search.Index;
 import org.expressme.search.SearchableId;
 import org.expressme.search.SearchableProperty;

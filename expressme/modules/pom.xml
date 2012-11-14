@@ -17,7 +17,6 @@
 		<module>validator</module>
 		<module>webwind</module>
 		<module>persist</module>
-		<module>simplejdbc</module>
 		<module>search</module>
 		<module>core</module>
 	</modules>

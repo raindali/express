@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.expressme.examples.showcase.entity.CityBus;
+import org.expressme.examples.showcase.domains.entity.CityBus;
 
 public class CityBusDict {
 	private static Logger logger  =  Logger.getLogger(CityBusDict.class);

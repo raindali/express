@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model clazz="com.dali.validator.resolver.UserCommand">
+	<rules>
+		<rule field="user.logUsername">
+			<valid rule="required" notice="用户名不能为空" />
+			<valid rule="length" parmeter="4:16" notice="用户名长度为4-16个字符" />
+			<valid rule="regex" parmeter="\w+" notice="用户名为字符a-z,1-9,_" />
+		</rule>
+	</rules>
+	<method property="submit">
+		<field property="user.logUsername" />
+		<field property="user.logPassword" />
+		<field property="user.deptId" />
+	</method>
+	<method property="loginSubmit">
+		<field property="user.logUsername,user.logPassword" />
+	</method>
+</model>

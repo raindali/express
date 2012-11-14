@@ -5,6 +5,7 @@ package org.expressme.persist;
  * 
  * @author Michael Liao (askxuefeng@gmail.com)
  */
+@SuppressWarnings("serial")
 public class QueryException extends DataAccessException {
 
     public QueryException() {

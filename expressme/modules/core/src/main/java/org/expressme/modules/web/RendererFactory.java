@@ -5,7 +5,7 @@ import java.util.Map;
 import org.expressme.webwind.renderer.TemplateRenderer;
 
 public abstract class RendererFactory {
-	public static String prefix = "/WEB-INF/jsp/";
+	public static String prefix = "/WEB-INF/views/";
 	public static String suffix = ".jsp";
 
 	private static String fullPath(String path) {
